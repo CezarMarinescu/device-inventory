@@ -5,6 +5,7 @@ app = FastAPI(title="Device Inventory API")
 devices = [
     {"id": 1, "name": "LAP-001", "os": "Windows 11", "compliant": True},
     {"id": 2, "name": "LAP-002", "os": "Windows 11", "compliant": False},
+    {"id": 3, "name": "LAP-003", "os": "Windows 11", "compliant": True},
 ]
 
 @app.get("/health")
