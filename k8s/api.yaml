@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: ghcr.io/cezarmarinescu/device-inventory:latest
+          image: ghcr.io/cezarmarinescu/device-inventory:sha-5f5854f
           ports:
             - containerPort: 8000
           envFrom:
