@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: api
+  namespace: argocd
+spec:
+  project: device-inventory
+  source:
+    repoURL: https://github.com/cezarmarinescu/device-inventory.git
+    targetRevision: main
+    path: charts/device-inventory
+    helm:
+      releaseName: api
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
