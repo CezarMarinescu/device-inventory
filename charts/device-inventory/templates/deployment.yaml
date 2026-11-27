@@ -1,30 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: {{ .Release.Name }}
   labels:
-    app: api
+    app: {{ .Release.Name }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: api
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: api
+        app: {{ .Release.Name }}
     spec:
       containers:
         - name: api
-          image: ghcr.io/cezarmarinescu/device-inventory:sha-e32b6d6
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8000
           envFrom:
             - secretRef:
-                name: postgres-credentials
+                name: {{ .Values.database.secretName }}
           env:
             - name: DATABASE_URL
-              value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@db:5432/$(POSTGRES_DB)?connect_timeout=5
+              value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@{{ .Values.database.host }}:{{ .Values.database.port }}/$(POSTGRES_DB)?connect_timeout=5"
           readinessProbe:
             httpGet:
               path: /health
@@ -39,18 +40,7 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              cpu: 50m
-              memory: 64Mi
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
             limits:
-              memory: 256Mi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: api
-spec:
-  selector:
-    app: api
-  ports:
-    - port: 80
-      targetPort: 8000
+              memory: {{ .Values.resources.limits.memory }}

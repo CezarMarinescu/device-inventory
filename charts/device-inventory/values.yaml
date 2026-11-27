@@ -1,0 +1,21 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/cezarmarinescu/device-inventory
+  tag: sha-e32b6d6
+  pullPolicy: IfNotPresent
+
+database:
+  secretName: postgres-credentials
+  host: db
+  port: 5432
+
+service:
+  port: 80
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
